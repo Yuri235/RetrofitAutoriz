@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     AutorizationModel model;
     IAutorization iAutorization;
     Call <Object> call;
+    Boolean aBoolean;
 
     Button button;
     @Override
@@ -39,28 +40,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         model.setPhone("asfasg");
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://174.138.54.52:8889/")
+                .baseUrl("http://174.138.54.52:8889")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
         iAutorization = retrofit.create(IAutorization.class);
-         call = iAutorization.getToken(model);
+        call = iAutorization.getToken(model);
     }
 
     @Override
     public void onClick(View view) {
+            call.enqueue(new Callback<Object>() {
+                @Override
+                public void onResponse(Call<Object> call, Response<Object> response) {
+                    textView.setText(response.code());
+                    Toast.makeText(MainActivity.this , "Success" , Toast.LENGTH_SHORT).show();
+                }
 
-        call.enqueue(new Callback<Object>() {
-            @Override
-            public void onResponse(Call<Object> call, Response<Object> response) {
-                textView.setText(response.body().toString());
-                Toast.makeText(MainActivity.this , "Success" , Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onFailure(Call<Object> call, Throwable t) {
-                Log.e("mLog:" , "error");
-            }
-        });
+                @Override
+                public void onFailure(Call<Object> call, Throwable t) {
+                    textView.setText("Error");
+                }
+            });
+        }
     }
-}
+

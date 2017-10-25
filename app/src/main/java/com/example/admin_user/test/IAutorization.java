@@ -9,6 +9,6 @@ import retrofit2.http.POST;
  */
 
 public interface IAutorization {
-    @POST("http://174.138.54.52:8889/#!/authorization/authorization_registration_create")
+    @POST("/authorization/registration")
     Call<Object> getToken(@Body AutorizationModel autorizationModel);
 }
